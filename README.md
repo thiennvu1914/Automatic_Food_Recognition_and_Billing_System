@@ -9,7 +9,7 @@ Real-time food detection với YOLOE, MobileCLIP, và SSIM-based Change Detectio
 - **🎯 Smart Detection**: YOLOE + Ensemble filtering (spatial, size, ML)
 - **🔍 High Accuracy**: MobileCLIP 512-dim embeddings, cosine similarity
 - **⚡ Change Detection**: SSIM layer giảm 90-95% YOLOE calls (ROI-based, high sensitivity)
-- **🚀 Real-time**: ~1s/image, streaming với anti-lag optimization
+- **🚀 Real-time**: ~2–2.5s/image on the tested pipeline; SSIM change detection avoids unnecessary inference during streaming
 - **🗄️ Database**: SQLite cache embeddings & detection history
 - **🌐 REST API**: FastAPI + WebSocket dual-stream
 - **📹 Demo**: test_streaming_demo.py với ROI visualization
@@ -43,7 +43,7 @@ python tests/test_streaming_demo.py                  # Real-time demo with ROI
 ## 📁 Project Structure
 
 ```
-ObjectDetection/
+Automatic_Food_Recognition_and_Billing_System/
 ├── food_detection/           # Main package
 │   ├── core/                # YOLOE, MobileCLIP, Pipeline
 │   ├── streaming/           # Change Detector (SSIM), Camera, WebSocket
@@ -94,7 +94,9 @@ result = pipeline.process_image("image.jpg")
 **Pipeline**: YOLOE Detection → Ensemble Filtering → MobileCLIP Embedding → Classification
 **Streaming**: ROI-based Change Detection (SSIM 0.94, Diff 0.05) → 90-95% YOLOE reduction
 
-**Performance**: ~2s/image (Detection 1.3s, Embedding 1s)
+**Measured pipeline latency**: ~2–2.5s/image (Detection ~1.3s, Embedding ~1s). Streaming latency varies because unchanged frames skip the full inference pipeline.
+
+> Runtime note: the SQLite file is created automatically and is intentionally excluded from Git. It may contain cached embeddings and detection history.
 
 ## 📊 API Response
 
